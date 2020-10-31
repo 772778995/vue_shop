@@ -8,7 +8,8 @@
       </el-form-item>
       <!-- 邮箱验证码 -->
       <el-form-item prop="EmailNum">
-        <el-button type="primary" :disabled="registeForm.isEmailExist">发送邮件验证码</el-button>
+        <el-button v-if="registeForm.leftTime" type="primary" disabled>剩余{{registeForm.leftTime}}秒</el-button>
+        <el-button v-else type="primary" :disabled="registeForm.isEmailExist" @click="sendEmail">发送邮件验证码</el-button>
         <el-input placeholder="请输入邮箱验证码 (必选)" prefix-icon="el-icon-message" class="EmailNum right" v-model="registeForm.EmailNum"></el-input>
       </el-form-item>
       <!-- 昵称 -->
@@ -72,6 +73,7 @@ export default {
       registeForm: {
         Email: '',
         isEmailExist: true,
+        leftTime: 0,
         EmailNum: '',
         userName: '',
         passWord: '',
@@ -102,8 +104,28 @@ export default {
     }
   },
   methods: {
+    //  当邮箱文本框获取焦点，发送邮件按钮不可点击
     noSendEmail: function () {
       this.registeForm.isEmailExist = true
+    },
+    sendEmail: function () {
+      this.countTime()
+      const { Email } = this.registeForm
+      this.$axios.post(
+        'https://d18c4217.cn/API/email/sendEmail.php',
+        `Email=${Email}`
+      )
+        .then(res => {
+          console.log(this.registeForm.Email)
+          console.log(res)
+        })
+    },
+    countTime: function () {
+      this.registeForm.leftTime = 60
+      const emailTime = setInterval(() => {
+        this.registeForm.leftTime--
+        if (!this.registeForm.leftTime) clearInterval(emailTime)
+      }, 1000)
     }
   }
 }
