@@ -10,7 +10,7 @@
       <el-form-item prop="EmailNum">
         <el-button v-if="registeForm.leftTime" type="primary" disabled>剩余{{registeForm.leftTime}}秒</el-button>
         <el-button v-else type="primary" :disabled="registeForm.isEmailExist" @click="sendEmail">发送邮件验证码</el-button>
-        <el-input placeholder="请输入邮箱验证码 (必选)" prefix-icon="el-icon-message" class="EmailNum right" v-model="registeForm.EmailNum"></el-input>
+        <el-input placeholder="请输入验证码 (必选)" prefix-icon="el-icon-message" class="EmailNum right" v-model="registeForm.EmailNum"></el-input>
       </el-form-item>
       <!-- 昵称 -->
       <el-form-item prop="userName">
@@ -26,7 +26,7 @@
       </el-form-item>
       <!-- 注册按钮 -->
       <el-form-item>
-        <el-button type="primary" class="block">注册</el-button>
+        <el-button type="primary" class="block" @click="registe">注册</el-button>
       </el-form-item>
       <!-- 已有账号 -->
       <el-form-item>
@@ -91,7 +91,7 @@ export default {
         ],
         userName: [
           { required: true, message: '昵称不得为空', trigger: 'blur' },
-          { min: 6, max: 12, message: '请输入6-12位字符', trigger: 'blur' }
+          { min: 2, max: 12, message: '请输入6-12位字符', trigger: 'blur' }
         ],
         passWord: [
           { required: true, message: '密码不得为空', trigger: 'blur' },
@@ -108,6 +108,7 @@ export default {
     noSendEmail: function () {
       this.registeForm.isEmailExist = true
     },
+    // 发送邮件验证码
     sendEmail: function () {
       this.countTime()
       const { Email } = this.registeForm
@@ -126,6 +127,28 @@ export default {
         this.registeForm.leftTime--
         if (!this.registeForm.leftTime) clearInterval(emailTime)
       }, 1000)
+    },
+    // 注册
+    registe: function () {
+      this.$refs.registeFormRef.validate(value => {
+        if (value) {
+          const { Email, EmailNum, userName, passWord, tel } = this.registeForm
+          this.$axios.post(
+            'https://d18c4217.cn/API/registe.php',
+            `Email=${Email}&EmailNum=${EmailNum}&userName=${userName}&passWord=${passWord}&tel=${tel}`
+          )
+            .then(res => {
+              const { data } = res
+              if (data === 1) {
+                console.log('注册成功')
+              } else if (data === 2) {
+                console.log('注册失败！')
+              } else if (data === 3) {
+                console.log('验证码错误或超时！')
+              }
+            })
+        }
+      })
     }
   }
 }

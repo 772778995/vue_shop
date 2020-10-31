@@ -56,12 +56,14 @@ export default {
   methods: {
     login: function () {
       this.$refs.loginFormRef.validate(value => {
-        const { Email, passWord } = this.loginForm
-        this.$axios.post(
-          'https://d18c4217.cn/API/login.php',
-          `Email=${Email}&passWord=${passWord}`
-        )
-          .then(res => console.log(res.data))
+        if (value) {
+          const { Email, passWord } = this.loginForm
+          this.$axios.post(
+            'https://d18c4217.cn/API/login.php',
+            `Email=${Email}&passWord=${passWord}`
+          )
+            .then(res => console.log(res.data))
+        }
       })
     }
   }
