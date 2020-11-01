@@ -98,7 +98,7 @@ export default {
       }
       setTimeout(() => {
         this.$axios.post(
-          'https://d18c4217.cn/API/email/checkEmailExist.php',
+          '/email/checkEmailExist.php',
           `Email=${this.registeForm.Email}`
         )
           .then(res => {
@@ -185,7 +185,7 @@ export default {
         if (value) {
           const { Email, EmailNum, userName, passWord, tel } = this.registeForm
           this.$axios.post(
-            'https://d18c4217.cn/API/registe.php',
+            '/API/registe.php',
             `Email=${Email}&EmailNum=${EmailNum}&userName=${userName}&passWord=${passWord}&tel=${tel}`
           )
             .then(res => {

@@ -80,12 +80,11 @@ export default {
   },
   methods: {
     login: function () {
-      this.openLoading()
       this.$refs.loginFormRef.validate(value => {
         if (value) {
           const { Email, passWord } = this.loginForm
           this.$axios.post(
-            'https://d18c4217.cn/API/login.php',
+            '/login.php',
             `Email=${Email}&passWord=${passWord}`
           )
             .then(res => {
