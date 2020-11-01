@@ -1,37 +1,88 @@
 <template>
   <div class="registe_box">
     <!-- 注册表单区域 -->
-    <el-form :model="registeForm" ref="registeFormRef" class="registe_form" :rules="rigisteFormRules" status-icon>
-      <!-- 邮箱地址 -->
-      <el-form-item prop="Email">
-        <el-input placeholder="请输入用于注册的邮箱 (必选)" prefix-icon="el-icon-message" v-model="registeForm.Email" @focus="noSendEmail"></el-input>
-      </el-form-item>
-      <!-- 邮箱验证码 -->
-      <el-form-item prop="EmailNum">
-        <el-button v-if="registeForm.leftTime" type="primary" disabled>剩余{{registeForm.leftTime}}秒</el-button>
-        <el-button v-else type="primary" :disabled="registeForm.isEmailExist" @click="sendEmail">发送邮件验证码</el-button>
-        <el-input placeholder="请输入验证码 (必选)" prefix-icon="el-icon-message" class="EmailNum right" v-model="registeForm.EmailNum"></el-input>
-      </el-form-item>
-      <!-- 昵称 -->
-      <el-form-item prop="userName">
-        <el-input placeholder="请输入昵称  (必选)" prefix-icon="el-icon-user" v-model="registeForm.userName"></el-input>
-      </el-form-item>
-      <!-- 密码 -->
-      <el-form-item prop="passWord">
-        <el-input type="passWord" placeholder="请输入密码  (必选)" prefix-icon="el-icon-lock" v-model="registeForm.passWord"></el-input>
-      </el-form-item>
-      <!-- 电话 -->
-      <el-form-item prop="tel">
-        <el-input placeholder="请输入电话号码  (可选)" prefix-icon="el-icon-phone-outline" v-model="registeForm.tel"></el-input>
-      </el-form-item>
-      <!-- 注册按钮 -->
-      <el-form-item>
-        <el-button type="primary" class="block" @click="registe">注册</el-button>
-      </el-form-item>
-      <!-- 已有账号 -->
-      <el-form-item>
-        <router-link class="right" to="/loginAndRegiste/login">已经有了账号？</router-link>
-      </el-form-item>
+    <el-form
+      :model="registeForm"
+      ref="registeFormRef"
+      class="registe_form"
+      :rules="rigisteFormRules"
+      status-icon>
+        <!-- 邮箱文本框 -->
+        <el-form-item prop="Email">
+          <el-input
+            placeholder="请输入用于注册的邮箱 (必选)"
+            prefix-icon="el-icon-message"
+            v-model="registeForm.Email"
+            @focus="noSendEmail">
+          </el-input>
+        </el-form-item>
+        <!-- 验证码文本框 -->
+        <el-form-item prop="EmailNum">
+          <!-- 如果以发送邮件进入倒计时60秒，按钮不可选 -->
+          <el-button
+            v-if="registeForm.leftTime"
+            type="primary"
+            disabled>
+              剩余{{registeForm.leftTime}}秒
+          </el-button>
+          <!-- 如果倒计时为0或未发送邮件且邮箱文本框中的值的格式正确，则可以发送邮件 -->
+          <el-button
+            v-else
+            type="primary"
+            :disabled="registeForm.isEmailExist"
+            @click="sendEmail">
+              发送邮件验证码
+          </el-button>
+          <!-- 验证码文本框 -->
+          <el-input
+            placeholder="请输入验证码 (必选)"
+            prefix-icon="el-icon-message"
+            class="EmailNum right"
+            v-model="registeForm.EmailNum">
+          </el-input>
+        </el-form-item>
+        <!-- 昵称文本框 -->
+        <el-form-item prop="userName">
+          <el-input
+            placeholder="请输入昵称  (必选)"
+            prefix-icon="el-icon-user"
+            v-model="registeForm.userName">
+          </el-input>
+        </el-form-item>
+        <!-- 密码输入框 -->
+        <el-form-item prop="passWord">
+          <el-input
+            type="passWord"
+            placeholder="请输入密码  (必选)"
+            prefix-icon="el-icon-lock"
+            v-model="registeForm.passWord">
+          </el-input>
+        </el-form-item>
+        <!-- 电话文本框 -->
+        <el-form-item prop="tel">
+          <el-input
+            placeholder="请输入电话号码  (可选)"
+            prefix-icon="el-icon-phone-outline"
+            v-model="registeForm.tel">
+          </el-input>
+        </el-form-item>
+        <!-- 注册按钮 -->
+        <el-form-item>
+          <el-button
+            type="primary"
+            class="block"
+            @click="registe">
+              注册
+          </el-button>
+        </el-form-item>
+        <!-- 已有账号 -->
+        <el-form-item>
+          <router-link
+            class="right"
+            to="/loginAndRegiste/login">
+              已经有了账号？
+          </router-link>
+        </el-form-item>
     </el-form>
   </div>
 </template>

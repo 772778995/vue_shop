@@ -5,28 +5,53 @@
       <img src="../../../assets/img/huaji.png">
     </div>
     <!-- 登陆表单区域 -->
-    <el-form ref="loginFormRef" class="login_form" :model="loginForm" :rules="loginFormRules" status-icon>
-      <!-- 邮箱地址 -->
-      <el-form-item prop="Email">
-        <el-input placeholder="请输入邮箱" v-model="loginForm.Email" prefix-icon="el-icon-message"></el-input>
-      </el-form-item>
-      <!-- 密码 -->
-      <el-form-item prop="passWord">
-        <el-input type="passWord" placeholder="请输入密码" v-model="loginForm.passWord" prefix-icon="el-icon-lock"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-checkbox v-model="loginForm.renUser">记住用户名</el-checkbox>
-      </el-form-item>
-      <!-- 登陆注册，忘记密码 -->
-      <el-form-item>
-        <router-link to="/forgetPsd" class="left">忘记密码？</router-link>
-        <div class="btns">
-          <el-button type="primary" @click="login" class="login">登陆</el-button>
-          <router-link to="/loginAndRegiste/registe">
-            <el-button type="infor">注册</el-button>
+    <el-form
+      ref="loginFormRef"
+      class="login_form"
+      :model="loginForm"
+      :rules="loginFormRules"
+      status-icon>
+        <!-- 邮箱地址 -->
+        <el-form-item prop="Email">
+          <el-input
+            placeholder="请输入邮箱"
+            v-model="loginForm.Email"
+            prefix-icon="el-icon-message">
+          </el-input>
+        </el-form-item>
+        <!-- 密码 -->
+        <el-form-item prop="passWord">
+          <el-input
+            type="passWord"
+            placeholder="请输入密码"
+            v-model="loginForm.passWord"
+            prefix-icon="el-icon-lock">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="loginForm.renUser">
+            记住用户名
+          </el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <!-- 忘记密码 -->
+          <router-link to="/forgetPsd" class="left">
+            忘记密码？
           </router-link>
-        </div>
-      </el-form-item>
+          <div class="btns">
+            <!-- 登陆 -->
+            <el-button
+              type="primary"
+              @click="login"
+              class="login">
+                登陆
+            </el-button>
+            <!-- 注册 -->
+            <router-link to="/loginAndRegiste/registe">
+              <el-button type="infor">注册</el-button>
+            </router-link>
+          </div>
+        </el-form-item>
     </el-form>
   </div>
 </template>
@@ -37,8 +62,8 @@ export default {
   data () {
     return {
       loginForm: {
-        Email: '772778995@qq.com',
-        passWord: 'wuhaochao',
+        Email: '',
+        passWord: '',
         remUser: ''
       },
       loginFormRules: {
@@ -55,6 +80,7 @@ export default {
   },
   methods: {
     login: function () {
+      this.openLoading()
       this.$refs.loginFormRef.validate(value => {
         if (value) {
           const { Email, passWord } = this.loginForm
@@ -62,7 +88,13 @@ export default {
             'https://d18c4217.cn/API/login.php',
             `Email=${Email}&passWord=${passWord}`
           )
-            .then(res => console.log(res.data))
+            .then(res => {
+              if (res.data) {
+                console.log('登陆成功！')
+              } else {
+                console.log('登陆失败！')
+              }
+            })
         }
       })
     }
@@ -71,6 +103,9 @@ export default {
 </script>
 
 <style scoped>
+  body {
+    margin: 0;
+  }
   .login_box {
     width: 450px; height: 300px;
     background: #fff;
