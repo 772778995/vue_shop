@@ -14,7 +14,7 @@
         <!-- 邮箱地址 -->
         <el-form-item prop="Email">
           <el-input
-            placeholder="请输入邮箱"
+            placeholder="请输入邮箱地址"
             v-model="loginForm.Email"
             prefix-icon="el-icon-message">
           </el-input>
@@ -28,9 +28,10 @@
             prefix-icon="el-icon-lock">
           </el-input>
         </el-form-item>
+        <!-- 记住邮箱地址 -->
         <el-form-item>
-          <el-checkbox v-model="loginForm.renUser">
-            记住用户名
+          <el-checkbox v-model="loginForm.ranUser">
+            记住邮箱地址
           </el-checkbox>
         </el-form-item>
         <el-form-item>
@@ -57,6 +58,7 @@
 </template>
 
 <script>
+import { setCookies, getCookies } from '../../../assets/js/cookies.js'
 export default {
   name: 'Login',
   data () {
@@ -64,7 +66,7 @@ export default {
       loginForm: {
         Email: '',
         passWord: '',
-        remUser: ''
+        ranUser: false
       },
       loginFormRules: {
         Email: [
@@ -81,22 +83,33 @@ export default {
   methods: {
     login: function () {
       this.$refs.loginFormRef.validate(value => {
+        // 如果表单校验成功则执行
         if (value) {
-          const { Email, passWord } = this.loginForm
+          const { Email, passWord, ranUser } = this.loginForm
+          // 向服务器发送请求
           this.$axios.post(
             '/login.php',
             `Email=${Email}&passWord=${passWord}`
           )
             .then(res => {
+              // 登陆成功
               if (res.status === 200) {
-                console.log('登陆成功！')
-              } else if (res.status === 204) {
-                console.log('邮箱地址或者密码错误！')
+                this.$message.success('登陆成功！')
+                setCookies('Email', Email)
+                setCookies('passWord', passWord)
+                if (ranUser === true) setCookies('Email', Email, 10)
+                return this.$router.push('/home')
+              } else {
+                // 登陆失败
+                this.$message.error('登陆失败！')
               }
             })
         }
       })
     }
+  },
+  mounted () {
+    if (getCookies().Email) this.loginForm.Email = getCookies().Email
   }
 }
 </script>
