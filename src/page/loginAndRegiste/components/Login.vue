@@ -88,10 +88,10 @@ export default {
             `Email=${Email}&passWord=${passWord}`
           )
             .then(res => {
-              if (res.data) {
+              if (res.status === 200) {
                 console.log('登陆成功！')
-              } else {
-                console.log('登陆失败！')
+              } else if (res.status === 204) {
+                console.log('邮箱地址或者密码错误！')
               }
             })
         }

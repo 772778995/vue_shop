@@ -185,7 +185,7 @@ export default {
         if (value) {
           const { Email, EmailNum, userName, passWord, tel } = this.registeForm
           this.$axios.post(
-            '/API/registe.php',
+            '/registe.php',
             `Email=${Email}&EmailNum=${EmailNum}&userName=${userName}&passWord=${passWord}&tel=${tel}`
           )
             .then(res => {
