@@ -28,10 +28,10 @@
             prefix-icon="el-icon-lock">
           </el-input>
         </el-form-item>
-        <!-- 记住邮箱地址 -->
+        <!-- 自动登陆 -->
         <el-form-item>
-          <el-checkbox v-model="loginForm.ranUser">
-            记住邮箱地址
+          <el-checkbox v-model="loginForm.autoLogin">
+            自动登陆
           </el-checkbox>
         </el-form-item>
         <el-form-item>
@@ -66,7 +66,7 @@ export default {
       loginForm: {
         Email: '',
         passWord: '',
-        ranUser: false
+        autoLogin: false
       },
       loginFormRules: {
         Email: [
@@ -81,11 +81,12 @@ export default {
     }
   },
   methods: {
+    // 登陆事件
     login: function () {
       this.$refs.loginFormRef.validate(value => {
         // 如果表单校验成功则执行
         if (value) {
-          const { Email, passWord, ranUser } = this.loginForm
+          const { Email, passWord, autoLogin } = this.loginForm
           // 向服务器发送请求
           this.$axios.post(
             '/login.php',
@@ -97,19 +98,36 @@ export default {
                 this.$message.success('登陆成功！')
                 setCookies('Email', Email)
                 setCookies('passWord', passWord)
-                if (ranUser === true) setCookies('Email', Email, 10)
+                if (autoLogin === true) {
+                  setCookies('Email', Email, 10)
+                  setCookies('passWord', passWord, 10)
+                }
                 return this.$router.push('/home')
               } else {
                 // 登陆失败
                 this.$message.error('登陆失败！')
               }
             })
+            .catch(err => {
+              console.log(err)
+              this.$message.error('请求异常')
+            })
         }
       })
+    },
+    // 自动登陆
+    autoLogin: function () {
+      const Email = getCookies().Email
+      const passWord = getCookies().passWord
+      if (Email && passWord) {
+        this.loginForm.Email = Email
+        this.loginForm.passWord = passWord
+        this.login()
+      }
     }
   },
   mounted () {
-    if (getCookies().Email) this.loginForm.Email = getCookies().Email
+    this.autoLogin()
   }
 }
 </script>
