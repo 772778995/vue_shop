@@ -8,7 +8,14 @@
     </div>
     <div>
       <!-- 用户名 -->
-      <span class="userName">欢迎您</span>
+      <span class="userName">
+        欢迎您!
+        <b>{{userInfo.name}}</b>
+      </span>
+      <el-tag v-if="userInfo.power>300">{{userInfo.object}}</el-tag>
+      <el-tag v-else-if="userInfo.power==201" type="success">{{userInfo.object}}</el-tag>
+      <el-tag v-else-if="userInfo.power>100 && userInfo.power<200" type="warning">{{userInfo.object}}</el-tag>
+      <el-tag v-else type="info">{{userInfo.object}}</el-tag>
       <!-- 退出登陆 -->
       <el-button @click="loginOut">退出</el-button>
     </div>
@@ -19,6 +26,9 @@
 import { setCookies } from '../../../assets/js/cookies.js'
 export default {
   name: 'homeHeader',
+  props: [
+    'userInfo'
+  ],
   methods: {
     // 退出登陆
     loginOut: function () {
@@ -48,5 +58,8 @@ export default {
   }
   .userName {
     margin-right: 0.9375rem;
+  }
+  .el-tag {
+    margin: 0 15px;
   }
 </style>

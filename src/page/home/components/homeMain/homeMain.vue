@@ -1,6 +1,6 @@
 <template>
   <el-main>
-    <router-view :localPsd="localPsd"></router-view>
+    <router-view :userInfo="userInfo"></router-view>
   </el-main>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   name: 'homeMain',
   props: [
-    'localPsd'
+    'userInfo'
   ]
 }
 </script>

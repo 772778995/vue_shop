@@ -22,7 +22,10 @@ import {
   Table,
   TableColumn,
   Tooltip,
-  ButtonGroup
+  ButtonGroup,
+  Tag,
+  Dialog,
+  MessageBox
 } from 'element-ui'
 
 Vue.use(Button)
@@ -47,4 +50,7 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Tooltip)
 Vue.use(ButtonGroup)
+Vue.use(Tag)
+Vue.use(Dialog)
+Vue.prototype.$messageBox = MessageBox
 Vue.prototype.$message = Message

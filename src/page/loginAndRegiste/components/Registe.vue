@@ -191,11 +191,12 @@ export default {
             .then(res => {
               const { data } = res
               if (data === 1) {
-                console.log('注册成功')
+                this.$message.success('注册成功！')
+                this.$router.push('/loginAndRegiste/login')
               } else if (data === 2) {
-                console.log('注册失败！')
+                this.$message.error('注册失败！')
               } else if (data === 3) {
-                console.log('验证码错误或超时！')
+                this.$message.warning('请检查验证码是否正确或者过期！')
               }
             })
         }

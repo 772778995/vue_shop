@@ -2,14 +2,16 @@
   <el-container>
     <!-- 头部 -->
     <el-header>
-      <home-header/>
+      <home-header
+        :userInfo="userInfo"
+      />
     </el-header>
     <el-container>
       <!-- 侧边栏 -->
       <home-aside/>
       <!-- 主题内容 -->
       <home-main
-        :localPsd="localPsd"
+        :userInfo="userInfo"
       />
     </el-container>
   </el-container>
@@ -25,8 +27,36 @@ export default {
   data () {
     return {
       // 获取cookie下的用户密码
-      localPsd: `Email=${getCookies().Email}&passWord=${getCookies().passWord}`
+      localPsd: `Email=${getCookies().Email}&passWord=${getCookies().passWord}`,
+      userInfo: {
+        id: '',
+        Email: '',
+        name: '',
+        object: '',
+        power: '',
+        avatat: ''
+      }
     }
+  },
+  methods: {
+    // 获取用户信息
+    getUserInfo: function () {
+      this.$axios.post(
+        '/vue_shop/getUserInfo.php',
+        this.localPsd
+      ).then(res => {
+        const { id, Email, name, object, power, avatat } = res.data[0]
+        this.userInfo.id = id
+        this.userInfo.Email = Email
+        this.userInfo.name = name
+        this.userInfo.object = object
+        this.userInfo.power = power
+        this.userInfo.avatat = avatat
+      })
+    }
+  },
+  mounted () {
+    this.getUserInfo()
   },
   components: {
     homeHeader,
