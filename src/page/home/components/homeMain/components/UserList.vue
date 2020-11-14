@@ -212,6 +212,7 @@ export default {
           else if (power === '102') object = '财务经理'
           else if (power === '103') object = '产品经理'
           else if (power === '1') object = '普通用户'
+          else if (power === '201') object = '大股东'
           this.$axios.post(
             '/vue_shop/edit.php',
             `&id=${id}&name=${name}&power=${power}&object=${object}`
