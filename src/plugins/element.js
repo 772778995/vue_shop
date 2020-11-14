@@ -25,7 +25,11 @@ import {
   ButtonGroup,
   Tag,
   Dialog,
-  MessageBox
+  MessageBox,
+  Cascader,
+  Select,
+  Option,
+  Switch
 } from 'element-ui'
 
 Vue.use(Button)
@@ -52,5 +56,9 @@ Vue.use(Tooltip)
 Vue.use(ButtonGroup)
 Vue.use(Tag)
 Vue.use(Dialog)
+Vue.use(Cascader)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Switch)
 Vue.prototype.$messageBox = MessageBox
 Vue.prototype.$message = Message

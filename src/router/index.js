@@ -6,7 +6,11 @@ import Registe from '../page/loginAndRegiste/components/Registe.vue'
 import Home from '../page/home/Home.vue'
 import Welcome from '../page/home/components/homeMain/components/Welcome.vue'
 import UserList from '../page/home/components/homeMain/components/UserList.vue'
-import RoleList from '../page/home/components/homeMain/components/RoleList.vue'
+import Report from '../page/home/components/homeMain/components/Report.vue'
+import PowerList from '../page/home/components/homeMain/components/PowerList.vue'
+import Category from '../page/home/components/homeMain/components/Category.vue'
+import ShopList from '../page/home/components/homeMain/components/ShopList.vue'
+import OrderList from '../page/home/components/homeMain/components/OrderList.vue'
 import { getCookies } from '../assets/js/cookies.js'
 
 Vue.use(VueRouter)
@@ -45,8 +49,24 @@ const routes = [
         component: UserList
       },
       {
-        path: '/home/roleList',
-        component: RoleList
+        path: '/home/report',
+        component: Report
+      },
+      {
+        path: '/home/powerList',
+        component: PowerList
+      },
+      {
+        path: '/home/category',
+        component: Category
+      },
+      {
+        path: '/home/shopList',
+        component: ShopList
+      },
+      {
+        path: '/home/orderList',
+        component: OrderList
       }
     ],
     beforeEnter: (to, from, next) => {

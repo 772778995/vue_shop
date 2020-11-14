@@ -54,6 +54,7 @@
           <el-input
             type="passWord"
             placeholder="请输入密码  (必选)"
+            show-password
             prefix-icon="el-icon-lock"
             v-model="registeForm.passWord">
           </el-input>
@@ -96,21 +97,19 @@ export default {
       if (!value) {
         return callback(new Error('请输入邮箱地址'))
       }
-      setTimeout(() => {
-        this.$axios.post(
-          '/email/checkEmailExist.php',
-          `Email=${this.registeForm.Email}`
-        )
-          .then(res => {
-            if (res.data === 2) {
-              this.registeForm.isEmailExist = false
-              callback()
-            } else {
-              this.registeForm.isEmailExist = true
-              callback(new Error('该邮箱地址已被注册或不可用'))
-            }
-          })
-      }, 1000)
+      this.$axios.post(
+        '/email/checkEmailExist.php',
+        `Email=${this.registeForm.Email}`
+      )
+        .then(res => {
+          if (res.data === 2) {
+            this.registeForm.isEmailExist = false
+            callback()
+          } else {
+            this.registeForm.isEmailExist = true
+            callback(new Error('该邮箱地址已被注册或不可用'))
+          }
+        })
     }
     // 判断手机号码的正则
     const checkTel = (rule, value, callback) => {

@@ -2,7 +2,8 @@
 
 import Vue from 'vue'
 import axios from 'axios'
-import './loading.js'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -21,7 +22,7 @@ const _axios = axios.create(config)
 _axios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    // Vue.prototype.openLoading()
+    NProgress.start()
     return config
   },
   function (error) {
@@ -34,7 +35,7 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   function (response) {
     // Do something with response data
-    // Vue.prototype.openLoading().close()
+    NProgress.done()
     return response
   },
   function (error) {

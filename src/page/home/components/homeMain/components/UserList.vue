@@ -66,7 +66,7 @@
           </el-table-column>
           <!-- 操作列 -->
           <el-table-column
-            label="人事经理及以上有权限"
+            label="操作"
             width="180">
               <!-- 模板插槽 -->
               <template slot-scope="scope">
@@ -77,24 +77,16 @@
                     type="primary"
                     size="mini"
                     icon="el-icon-edit"
-                    :disabled="userInfo.power-scope.row.power<10 || userInfo.power!=101 && userInfo.power<200">
+                    :disabled="(userInfo.power!=101 && userInfo.power<200) || userInfo.power<scope.row.power-10">
                   </el-button>
                 </el-tooltip>
-                <!-- <el-tooltip effect="dark" content="设置" :enterable="false" placement="top">
-                  <el-button
-                    type="warning"
-                    size="mini"
-                    icon="el-icon-setting"
-                    :disabled="userInfo.power<=scope.row.power">
-                  </el-button>
-                </el-tooltip> -->
                 <el-tooltip effect="dark" content="删除" :enterable="false" placement="top">
                   <el-button
                     @click="delUser(scope.row.id)"
                     type="danger"
                     size="mini"
                     icon="el-icon-delete"
-                    :disabled="userInfo.power-scope.row.power<10 || userInfo.power!=101 && userInfo.power<200">
+                    :disabled="(userInfo.power!=101 && userInfo.power<200) || userInfo.power<scope.row.power-10 || userInfo.power === scope.row.power">
                   </el-button>
                 </el-tooltip>
               </template>
@@ -124,15 +116,25 @@
       :visible.sync="editUserShow"
       width="50%">
         <!-- 对话框中的编辑表单 -->
-        <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
-          <el-form-item label="id:">
+        <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="150px">
+          <el-form-item label="用户 ID :">
             <el-input readonly disabled v-model="editForm.id"></el-input>
           </el-form-item>
-          <el-form-item label="Email:">
+          <el-form-item label="用户邮箱:">
             <el-input readonly disabled v-model="editForm.Email"></el-input>
           </el-form-item>
-          <el-form-item label="name:" prop="name">
+          <el-form-item label="用户昵称:" prop="name">
             <el-input v-model="editForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="权限设置:">
+            <el-select v-model="editForm.power" placeholder="请选择">
+              <el-option
+                v-for="item in editForm.options"
+                :key="item.power"
+                :label="item.object"
+                :value="item.power">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -161,9 +163,16 @@ export default {
       editForm: {
         id: '',
         Email: '',
-        name: ''
+        name: '',
+        options: [
+          { power: '101', object: '人事经理' },
+          { power: '102', object: '财务经理' },
+          { power: '103', object: '产品经理' },
+          { power: '1', object: '普通用户' }
+        ],
+        power: ''
       },
-      // 修改用户表单规则
+      // 修改用户对话框表单规则
       editFormRules: {
         name: [
           { required: true, message: '请输入昵称', trigger: 'blur' },
@@ -187,19 +196,25 @@ export default {
     // 修改用户
     editUser: function (userInfo) {
       this.editUserShow = true
-      const { id, Email, name } = userInfo
+      const { id, Email, name, power } = userInfo
       this.editForm.id = id
       this.editForm.Email = Email
       this.editForm.name = name
+      this.editForm.power = power
     },
     // 确定修改
     editUserSure: function () {
       this.$refs.editFormRef.validate(value => {
         if (value) {
-          const { id, name } = this.editForm
+          const { id, name, power } = this.editForm
+          let object
+          if (power === '101') object = '人事经理'
+          else if (power === '102') object = '财务经理'
+          else if (power === '103') object = '产品经理'
+          else if (power === '1') object = '普通用户'
           this.$axios.post(
             '/vue_shop/edit.php',
-            `&id=${id}&name=${name}`
+            `&id=${id}&name=${name}&power=${power}&object=${object}`
           )
             .then(res => {
               if (res.status === 200) {
