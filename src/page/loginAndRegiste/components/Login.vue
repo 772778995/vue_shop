@@ -36,9 +36,9 @@
         </el-form-item>
         <el-form-item>
           <!-- 忘记密码 -->
-          <a @click="forgetPsd" class="left">
+          <router-link to="/loginAndRegiste/forgetPsd">
             忘记密码？
-          </a>
+          </router-link>
           <div class="btns">
             <!-- 登陆 -->
             <el-button
@@ -124,12 +124,6 @@ export default {
         this.loginForm.passWord = passWord
         this.login()
       }
-    },
-    forgetPsd: function () {
-      setCookies('Email', '0000@qq.com')
-      setCookies('passWord', '000000')
-      this.$message.info('你以为我懒得写代码？我是怕你懒得注册！')
-      this.$router.push('/home')
     }
   },
   mounted () {

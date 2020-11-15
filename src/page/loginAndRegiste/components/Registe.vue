@@ -89,14 +89,12 @@
 </template>
 
 <script>
+import { setCookies, getCookies } from '../../../assets/js/cookies.js'
 export default {
   name: 'Registe',
   data () {
     // 检查邮箱是否注册
     const checkEmail = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('请输入邮箱地址'))
-      }
       this.$axios.post(
         '/email/checkEmailExist.php',
         `Email=${this.registeForm.Email}`
@@ -167,16 +165,35 @@ export default {
         `Email=${Email}`
       )
         .then(res => {
-          console.log(this.registeForm.Email)
-          console.log(res)
+          if (res.status === 200) this.$message.success('发送邮件成功！')
+          else this.$message.error('发送邮件失败！')
         })
     },
-    countTime: function () {
-      this.registeForm.leftTime = 60
+    // 计时器
+    countEmailTime () {
       const emailTime = setInterval(() => {
         this.registeForm.leftTime--
         if (!this.registeForm.leftTime) clearInterval(emailTime)
       }, 1000)
+    },
+    // 发送邮件后记录cookies
+    countTime: function () {
+      const overTime = Math.floor(new Date().getTime() / 1000) + 60
+      this.registeForm.leftTime = 60
+      setCookies('overTime', overTime, 1)
+      // 调用计时器
+      this.countEmailTime()
+    },
+    // 根据cookies倒计时
+    howMuchTime () {
+      if (getCookies().overTime) {
+        const leftTime = getCookies().overTime - Math.floor(new Date().getTime() / 1000)
+        if (leftTime > 0) {
+          this.registeForm.leftTime = leftTime
+          // 调用计时器
+          this.countEmailTime()
+        } else setCookies('overTime', '', -1)
+      }
     },
     // 注册
     registe: function () {
@@ -201,6 +218,9 @@ export default {
         }
       })
     }
+  },
+  created () {
+    this.howMuchTime()
   }
 }
 </script>

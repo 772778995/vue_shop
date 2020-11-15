@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import LoginAndRegiste from '../page/loginAndRegiste/LoginAndRegiste.vue'
 import Login from '../page/loginAndRegiste/components/Login.vue'
 import Registe from '../page/loginAndRegiste/components/Registe.vue'
+import ForgetPsd from '../page/loginAndRegiste/components/ForgetPsd.vue'
 import Home from '../page/home/Home.vue'
 import Welcome from '../page/home/components/homeMain/components/Welcome.vue'
 import UserList from '../page/home/components/homeMain/components/UserList.vue'
@@ -32,6 +33,10 @@ const routes = [
       {
         path: '/loginAndRegiste/registe',
         component: Registe
+      },
+      {
+        path: '/loginAndRegiste/forgetPsd',
+        component: ForgetPsd
       }
     ]
   },
